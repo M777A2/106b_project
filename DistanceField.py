@@ -23,7 +23,7 @@ class Px:
 
 
 class Grid:
-    def __init__(self, w: int = 1000, h: int = 1000):
+    def __init__(self, w: int = 100, h: int = 100):
         self.width = w
         self.height = h
         self.grids = [np.array([[Px(0,0)]*w]*h)]*2
@@ -47,10 +47,11 @@ class Grid:
             self.grids[grid][x,y] = neighbor
 
     def generateSDT(self):
-        y_range = range(self.height)
-        x_range = range(self.width)
+        y_range = list(range(1, self.height-1))
+        x_range = list(range(1, self.width-1))
         for i in range(2):
             for y in y_range:
+                print("y = {}".format(y))
                 for x in x_range:
                     self._compare(i, x, y, -1,  0)
                     self._compare(i, x, y,  0, -1)
@@ -71,6 +72,14 @@ class Grid:
                 x_range.reverse()                    
                 for x in x_range:
                     self._compare(i, x, y,  -1,  0)
+            y_range.reverse()
+            x_range.reverse()
 
         self.sdt = self.grids[0] - self.grids[1]
 
+if __name__ == "__main__":
+    grid = Grid()
+    grid.add_object(lambda x, y: 30<x<50 and 30<y<50)
+    grid.generateSDT()
+    print("sdt done")
+    print(grid.sdt)
