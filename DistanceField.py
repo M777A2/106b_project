@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from numpy.linalg import norm
-from typing import Callable
+from typing import Callable, Iterable
 
 
 class Grid:
@@ -18,11 +18,15 @@ class Grid:
     def _show_grid(self, show) -> str:
         if show is None:
             return ""
+        if isinstance(show[0, 0], Iterable):
+            foo = lambda x, y: " "*(3-len(str(int(norm(show[x, y]))))) + str(int(norm(show[x, y])))
+        else:
+            foo = lambda x, y: " "*(3-len(str(int(show[x, y])))) + str(int(show[x, y]))
         rep = ""
         for y in range(self.height):
             line = ""
             for x in range(self.width):
-                line += " "*(3-len(str(int(norm(show[x, y]))))) + str(int(norm(show[x, y])))
+                line += foo(x, y)
             rep += line + "\n"
         return rep
 
@@ -42,9 +46,9 @@ class Grid:
                     self.grids[0][x, y] = np.array([self.MAX, self.MAX])
                     self.grids[1][x, y] = np.array([0, 0])
 
-        for grid in range(2):
-            print("grid: {}".format(grid))
-            print(self._show_grid(self.grids[grid]))
+        # for grid in range(2):
+        #     print("grid: {}".format(grid))
+        #     print(self._show_grid(self.grids[grid]))
 
     def _compare(self, grid, x: int, y: int, offset_x: int, offset_y: int):
         if 0 <= (x+offset_x) < self.width and 0 <= (y+offset_y) < self.height:
@@ -69,7 +73,6 @@ class Grid:
 
         for i in range(2):  # compute for each grid separately
             for y in y_range:
-                print("y = ", y)
                 for x in x_range:
                     self._compare(i, x, y, -1,  0)
                     self._compare(i, x, y,  0, -1)
@@ -79,7 +82,6 @@ class Grid:
                     self._compare(i, x, y,  1,  0)
 
             for y in y_rev:
-                print("y = ", y)
                 for x in x_rev:
                     self._compare(i, x, y,  1,  0)
                     self._compare(i, x, y,  0,  1)
@@ -99,7 +101,7 @@ class Grid:
 
 
 if __name__ == "__main__":
-    grid = Grid(60,60)
+    grid = Grid(60, 60)
     grid.add_object(lambda x, y: 30 < x < 60 and 30 < y < 60)
     grid.generateSDT()
     print("sdt done")
