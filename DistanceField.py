@@ -101,7 +101,8 @@ class Grid:
 
 
 if __name__ == "__main__":
-    grid = Grid(60, 60)
+    size = 80
+    grid = Grid(size, size)
     grid.add_object(lambda x, y: 30 < x < 60 and 30 < y < 60)
     grid.generateSDT()
     print("sdt done")
@@ -111,12 +112,12 @@ if __name__ == "__main__":
     df = grid.get()
 
     # Plot
-    plt.figure(figsize=(60, 60), dpi=80)
-    sns.heatmap(df, xticklabels=range(60), yticklabels=range(60), cmap='RdYlGn', center=0,
-                annot=True)
+    plt.figure(figsize=(size, size), dpi=9)
+    sns.heatmap(df, xticklabels=range(size), yticklabels=range(size), cmap='RdYlGn', center=0,
+                annot=False)
 
     # Decorations
-    plt.title('Signed Distance Field', fontsize=22)
-    plt.xticks(fontsize=12)
-    plt.yticks(fontsize=12)
+    plt.title('Signed Distance Field', fontsize=120)
+    plt.xticks(fontsize=62)
+    plt.yticks(fontsize=62)
     plt.show()
